@@ -1,0 +1,151 @@
+
+
+body{
+
+
+   font-family: 'Times New Roman', Times, serif;
+  background-color: #e6e7f0ef;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+
+.bill-manager-container {
+  max-width: 860px; 
+  margin: 30px auto;
+  background: rgb(243, 238, 247);
+  padding: 24px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(204, 201, 213, 0.1); /* Softer, more pronounced shadow */
+}
+
+h1{
+  text-align: center;
+  color: #583cbf;
+  margin-top: auto;
+
+}
+
+h2, h3 {
+  color: #4d38ed; /* Darker heading color */
+  border-bottom: 2px solid #ecf0f1; /* Light separator line */
+  padding-bottom: 8px;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+/* Form layout */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Increased gap for spacing */
+  margin-bottom: 25px;
+  padding: 10px;
+  border: 1px dashed #bdc3c7; /* Dashed border to frame the form */
+  border-radius: 8px;
+}
+
+/* Form Inputs */
+form input {
+  flex: 1 1 30%; /* Allows 3-4 inputs per line on wider screens */
+  min-width: 150px;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fcfcfc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form input:focus {
+  border-color: #b6aecf; /* Blue focus color */
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+/* Base Button */
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;                /* space between icon + text */
+  
+  height: 38px;            /* fixed height for uniform look */
+  padding: 0 16px;         /* left & right padding */
+  
+  background-color: #2563eb; /* Blue (Tailwind style) */
+  color: white;
+  border: none;
+  border-radius: 6px;      /* smooth rounded corners */
+  
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover effect */
+button:hover {
+  background-color: #1d4ed8; /* darker blue */
+  transform: translateY(-1px);
+}
+
+
+
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+th, td {
+  padding: 12px 15px;
+  border: 1px solid #ecf0f1; /* Light borders */
+  text-align: left;
+}
+
+th {
+  background-color: #f8f9fa; /* Very light header background */
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Zebra striping for table rows */
+tbody tr:nth-child(even) {
+  background-color: #fcfcfc;
+}
+
+/* -------------------------------------- */
+/* Specific style for the delete button */
+/* -------------------------------------- */
+.delete-btn {
+  padding: 6px 10px;
+  font-size: 14px;
+  background-color: #e74c3c; /* Red color for delete */
+  flex: none;
+  width: auto;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    transform: none; /* Prevent the general button hover from overriding */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .bill-manager-container {
+    margin: 15px;
+    padding: 15px;
+  }
+  form input {
+    flex: 1 1 100%; /* Stack inputs vertically on small screens */
+  }
+
+
+  }
