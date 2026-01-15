@@ -61,50 +61,64 @@ const convertGroupToWords = (num, ones, teens, tens) => {
 };
 
 const pdfStyles = StyleSheet.create({
-  page: { padding: 20, fontFamily: 'Helvetica', fontSize: 10 },
+  page: { padding: 15, fontFamily: 'Helvetica', fontSize: 10 },
   headerContainer: { 
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-    marginBottom: 15,
-    paddingBottom: 10,
+    marginBottom: 12,
+    paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc'
   },
-  headerImage: { width: 40, height: 40 },
+  headerImage: { width: 35, height: 35 },
   headerText: { 
     flex: 1, 
     textAlign: 'center',
-    marginHorizontal: 10
+    marginHorizontal: 8
   },
-  header: { fontSize: 14, fontWeight: 'bold', color: '#222266', marginBottom: 2 },
-  subHeader: { fontSize: 8, color: '#444', marginBottom: 1 },
-  detailsRow: { flexDirection: 'row', fontSize: 9, justifyContent: 'space-between', marginBottom: 8 },
-  companyName: { fontSize: 10, marginBottom: 8, fontWeight: 'bold', color: '#231b80' },
-  table: { display: 'table', width: 'auto', marginTop: 8, marginBottom: 8, borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderBottomWidth: 0 },
-  tableRow: { flexDirection: 'row' },
-  tableColHeader: { width: '20%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, backgroundColor: '#e9eaef', padding: 4, fontWeight: 'bold', fontSize: 8, color: '#101858' },
-  tableCol: { width: '20%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, padding: 4, fontSize: 8 },
-  tableColAmount: { width: '20%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, padding: 4, fontSize: 8, fontWeight: 'bold', color: '#252525', textAlign: 'right' },
-  footer: { marginTop: 12, fontSize: 10, textAlign: 'right', color: '#2a297d', fontWeight: 'bold', marginBottom: 8 },
-  signatureRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 },
-  words: { fontSize: 9, width: '65%' },
-  sign: { fontSize: 9, width: '35%', textAlign: 'right' }
+  header: { fontSize: 12, fontWeight: 'bold', color: '#222266', marginBottom: 2 },
+  subHeader: { fontSize: 7, color: '#444', marginBottom: 1 },
+  detailsRow: { flexDirection: 'row', fontSize: 8, justifyContent: 'space-between', marginBottom: 6 },
+  companyName: { fontSize: 9, marginBottom: 6, fontWeight: 'bold', color: '#231b80' },
+  table: { display: 'table', width: 'auto', marginTop: 6, marginBottom: 6, borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderBottomWidth: 0 },
+  tableRow: { flexDirection: 'row', minHeight: 24 },
+  tableColHeader: { width: '20%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, backgroundColor: '#e9eaef', padding: 6, fontWeight: 'bold', fontSize: 9, color: '#101858' },
+  tableCol: { width: '20%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, padding: 6, fontSize: 9 },
+  tableColAmount: { width: '20%', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, padding: 6, fontSize: 9, fontWeight: 'bold', color: '#252525', textAlign: 'right' },
+  footer: { marginTop: 10, fontSize: 10, textAlign: 'left', color: '#2a297d', fontWeight: 'bold', marginBottom: 6 },
+  signatureRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
+  words: { fontSize: 9, textAlign: 'left', width: '65%' },
+  sign: { fontSize: 9, width: '35%', textAlign: 'right', marginTop: 40, marginRight: 30 }
 });
 
 const transportCompanyInfo = {
   name: "VIGHNAHARTA Transport Services",
   address: "A/P Ankalkhop, Tal: Palus, Dist: Sangli",
-  pan: "PAN NO.: CKPSG9803F",
-  contact: "Mob.: 7620727627 / 9730442588"
+  pan: "PAN NO.: CKSPG8035P",
+  contact: "Mob.: 7620272627 / 9730424588"
+};
+
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const formattedDate = (date) => {
+  let day = date.split("-")[2];
+  let month = date.split("-")[1];
+  let year = date.split("-")[0];
+  return `${day}/${month}/${year}`;
 };
 
 const MyBillDocument = ({ bills, clientCompanyName, totalAmount }) => {
-  const billNo = bills[0]?.billNo || "122"; 
-  const billDate = bills[0]?.date || new Date().toLocaleDateString('en-GB');
+  const billNo = bills[0]?.billNo || "";
+  const billDate = getCurrentDate();
   const amountInWords = convertAmountToWords(Math.floor(totalAmount));
   
-  // Split bills into chunks of 20 per page
   const billsPerPage = 20;
   const pages = [];
   for (let i = 0; i < bills.length; i += billsPerPage) {
@@ -115,7 +129,6 @@ const MyBillDocument = ({ bills, clientCompanyName, totalAmount }) => {
     <Document>
       {pages.map((pageBills, pageIndex) => (
         <Page key={pageIndex} size="A4" style={pdfStyles.page}>
-          {/* Header with Images and Text */}
           <View style={pdfStyles.headerContainer}>
             <Image src={headerLeft} style={pdfStyles.headerImage} />
             <View style={pdfStyles.headerText}>
@@ -127,18 +140,16 @@ const MyBillDocument = ({ bills, clientCompanyName, totalAmount }) => {
             <Image src={headerRight} style={pdfStyles.headerImage} />
           </View>
 
-          {/* Bill Details */}
           <View style={pdfStyles.detailsRow}>
             <Text>Bill No.: {billNo}</Text>
-            <Text>Date: {billDate}</Text>
+            <Text>Bill Date: {formattedDate(billDate)}</Text>
           </View>
           <Text style={pdfStyles.companyName}>Company Name: {clientCompanyName}</Text>
 
-          {/* Table */}
           <View style={pdfStyles.table}>
             <View style={pdfStyles.tableRow}>
               <View style={pdfStyles.tableColHeader}><Text>Sr. no.</Text></View>
-              <View style={pdfStyles.tableColHeader}><Text>Date</Text></View>
+              <View style={pdfStyles.tableColHeader}><Text>Entry Date</Text></View>
               <View style={pdfStyles.tableColHeader}><Text>From</Text></View>
               <View style={pdfStyles.tableColHeader}><Text>To</Text></View>
               <View style={pdfStyles.tableColHeader}><Text>Amount</Text></View>
@@ -146,7 +157,7 @@ const MyBillDocument = ({ bills, clientCompanyName, totalAmount }) => {
             {pageBills.map((bill, idx) => (
               <View style={pdfStyles.tableRow} key={bill.id || idx}>
                 <View style={pdfStyles.tableCol}><Text>{pageIndex * billsPerPage + idx + 1}</Text></View>
-                <View style={pdfStyles.tableCol}><Text>{bill.date}</Text></View>
+                <View style={pdfStyles.tableCol}><Text>{formattedDate(bill.entryDate)}</Text></View>
                 <View style={pdfStyles.tableCol}><Text>{bill.from}</Text></View>
                 <View style={pdfStyles.tableCol}><Text>{bill.to}</Text></View>
                 <View style={pdfStyles.tableColAmount}><Text>{Number(bill.amount).toFixed(2)}</Text></View>
@@ -154,7 +165,6 @@ const MyBillDocument = ({ bills, clientCompanyName, totalAmount }) => {
             ))}
           </View>
 
-          {/* Footer and Signature */}
           {pageIndex === pages.length - 1 && (
             <>
               <View style={pdfStyles.footer}>
@@ -177,7 +187,7 @@ const BillManager = () => {
     const [billNo, setBillNo] = useState(122);
     const [clientCompanyName, setClientCompanyName] = useState("V&M Tooling Pvt Ltd");
     const [form, setForm] = useState({
-        date: "",
+        entryDate: "",
         from: "",
         to: "",
         amount: ""
@@ -212,8 +222,8 @@ const BillManager = () => {
 
     const addBill = (e) => {
         e.preventDefault();
-        const { date, from, to, amount } = form;
-        if (!date || !from || !to || !amount) {
+        const { entryDate, from, to, amount } = form;
+        if (!entryDate || !from || !to || !amount) {
             alert("Please fill all Bill Entry fields.");
             return;
         }
@@ -230,9 +240,9 @@ const BillManager = () => {
         }; 
         
         const updatedBills = [...bills, newBill];
-        updatedBills.sort((a, b) => new Date(a.date) - new Date(b.date));
+        updatedBills.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate));
         setBills(updatedBills);
-        setForm({ date: "", from: "", to: "", amount: "" });
+        setForm({ entryDate: "", from: "", to: "", amount: "" });
     };
 
     const deleteBill = (id) => {
@@ -245,7 +255,6 @@ const BillManager = () => {
 
     const totalAmount = bills.reduce((sum, bill) => sum + Number(bill.amount), 0);
 
-    // Generate PDF filename with company name and date
     const generatePDFFileName = () => {
         const today = new Date().toISOString().split('T')[0].replace(/-/g, '_');
         const companyNameFormatted = clientCompanyName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
@@ -255,7 +264,6 @@ const BillManager = () => {
     return (
         <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '40px 20px' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                {/* Header Section */}
                 <div style={{ background: 'white', borderRadius: '12px', padding: '40px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
                     <h1 style={{ textAlign: 'center', color: '#2d3748', margin: '0 0 10px 0', fontSize: '32px', fontWeight: '700' }}>
                         {COMMON_COMPANY_NAME}
@@ -265,15 +273,12 @@ const BillManager = () => {
                     </p>
                 </div>
 
-                {/* Main Content */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '30px', marginBottom: '30px' }}>
-                    {/* Form Card */}
                     <div style={{ background: 'white', borderRadius: '12px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
                         <h2 style={{ color: '#2d3748', marginTop: '0', marginBottom: '24px', fontSize: '20px', fontWeight: '600' }}>
                             Add Bill Entry
                         </h2>
 
-                        {/* Company Name Input */}
                         <div style={{ marginBottom: '20px' }}>
                             <label style={{ display: 'block', color: '#4a5568', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>
                                 Company Name
@@ -299,7 +304,6 @@ const BillManager = () => {
                             />
                         </div>
 
-                        {/* Bill Number */}
                         <div style={{ marginBottom: '20px' }}>
                             <label style={{ display: 'block', color: '#4a5568', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>
                                 Bill Number
@@ -327,15 +331,14 @@ const BillManager = () => {
 
                         <hr style={{ border: 'none', borderTop: '2px solid #e2e8f0', margin: '24px 0' }} />
 
-                        {/* Form Inputs */}
                         <div style={{ marginBottom: '16px' }}>
                             <label style={{ display: 'block', color: '#4a5568', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>
-                                Date
+                                Entry Date
                             </label>
                             <input 
-                                name="date" 
+                                name="entryDate" 
                                 type="date" 
-                                value={form.date} 
+                                value={form.entryDate} 
                                 onChange={handleChange}
                                 style={{
                                     width: '100%',
@@ -450,7 +453,6 @@ const BillManager = () => {
                         </button>
                     </div>
 
-                    {/* Summary Card */}
                     <div style={{ background: 'white', borderRadius: '12px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
                         <h2 style={{ color: '#2d3748', marginTop: '0', marginBottom: '24px', fontSize: '20px', fontWeight: '600' }}>
                             Summary
@@ -505,7 +507,6 @@ const BillManager = () => {
                     </div>
                 </div>
 
-                {/* Data Table */}
                 <div style={{ background: 'white', borderRadius: '12px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
                     <h2 style={{ color: '#2d3748', marginTop: '0', marginBottom: '24px', fontSize: '20px', fontWeight: '600' }}>
                         Bill Entries
@@ -517,7 +518,7 @@ const BillManager = () => {
                                 <tr style={{ background: '#f7fafc', borderBottom: '2px solid #e2e8f0' }}>
                                     <th style={{ padding: '16px', textAlign: 'left', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>Sr. No.</th>
                                     <th style={{ padding: '16px', textAlign: 'left', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>Bill No.</th>
-                                    <th style={{ padding: '16px', textAlign: 'left', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>Date</th>
+                                    <th style={{ padding: '16px', textAlign: 'left', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>Entry Date</th>
                                     <th style={{ padding: '16px', textAlign: 'left', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>From</th>
                                     <th style={{ padding: '16px', textAlign: 'left', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>To</th>
                                     <th style={{ padding: '16px', textAlign: 'right', color: '#4a5568', fontWeight: '600', fontSize: '14px' }}>Amount</th>
@@ -532,7 +533,7 @@ const BillManager = () => {
                                     >
                                         <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px' }}>{idx + 1}</td>
                                         <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px', fontWeight: '600' }}>{bill.billNo}</td>
-                                        <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px' }}>{bill.date}</td>
+                                        <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px' }}>{formattedDate(bill.entryDate)}</td>
                                         <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px' }}>{bill.from}</td>
                                         <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px' }}>{bill.to}</td>
                                         <td style={{ padding: '16px', color: '#2d3748', fontSize: '14px', fontWeight: '600', textAlign: 'right' }}>₹{Number(bill.amount).toFixed(2)}</td>
